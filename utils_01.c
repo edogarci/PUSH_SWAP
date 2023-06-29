@@ -1,15 +1,23 @@
-//
-// Created by Edo on 26/06/2023.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_01.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: edogarci <edogarci@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/29 12:10:03 by edogarci          #+#    #+#             */
+/*   Updated: 2023/06/29 12:10:03 by edogarci         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "push_swap.h"
 
 //Converts params from char * type to integer type
-static int f_atoi(const char *str)
+int	f_atoi(const char *str)
 {
-	long n;
-	int dec;
-	int len;
+	long	n;
+	int		dec;
+	int		len;
 
 	len = 0;
 	while (str[len] != '\0')
@@ -36,16 +44,13 @@ static int f_atoi(const char *str)
 //as an element of the linked list representing the stack
 void	f_init_stack(int argc, char **argv, t_list **stack_head)
 {
-	int num;
-	int cont;
-	t_list *stack_element;
+	int		cont;
+	t_list	*stack_element;
 
 	stack_element = NULL;
 	cont = 1;
-	num = 0;
-	while(cont < argc)
+	while (cont < argc)
 	{
-		num = f_atoi(argv[cont]);
 		if (!stack_element)
 		{
 			stack_element = malloc(sizeof(t_list));
@@ -58,20 +63,19 @@ void	f_init_stack(int argc, char **argv, t_list **stack_head)
 			if (stack_element->next)
 				stack_element = stack_element->next;
 		}
-		stack_element->value = num;
+		stack_element->value = f_atoi(argv[cont++]);
 		stack_element->index = -1;
 		stack_element->next = NULL;
-		cont++;
 	}
 }
 
 //Check if all parameters given when calling program
 //are proper integers
-static int f_check_integers(int argc, char **argv)
+int	f_check_integers(int argc, char **argv)
 {
-	int cont;
-	int p;
-	char *s;
+	int		cont;
+	int		p;
+	char	*s;
 
 	cont = 1;
 	while (cont < argc)
@@ -81,9 +85,9 @@ static int f_check_integers(int argc, char **argv)
 		while (s[p] != '\0')
 		{
 			if ((p == 0) && (s[p] != '-' && !(s[p] >= '0' && s[p] <= '9')))
-					return (1);
+				return (1);
 			else if ((p != 0) && !(s[p] >= '0' && s[p] <= '9'))
-					return(1);
+				return (1);
 			p++;
 		}
 		cont++;
@@ -91,32 +95,39 @@ static int f_check_integers(int argc, char **argv)
 	return (0);
 }
 
-//Compares all parameters to check if any duplicate exists
-/*static int f_check_duplicates(int argc, char **argv)
+//Compares all parameters to check if there are duplicates
+int	f_check_duplicates(int argc, char **argv)
 {
-	int cont;
-	int n;
+	int	j;
+	int	i;
 
-	cont = 1;
-	while (*(argv[cont]) != '\0')
+	j = 1;
+	while (j < argc)
 	{
-		n = 1;
-		while (*(argv[cont + n]) != '\0')
+		i = 1;
+		while (i < argc)
 		{
-			if (*(argv[cont]) == *(argv[cont + n]))
-				return (1);
-			n++;
+			if (j != i)
+			{
+				if (f_compare_params(argv[j], argv[i]) != 0)
+					return (1);
+			}
+			i++;
 		}
-		cont++;
+		j++;
 	}
 	return (0);
-}*/
+}
 
-int f_check_params(int argc, char **argv)
+//Check if parameters are correct:
+// - No duplicates
+// - No float numbers
+// - No numbers larger than integer type can handle
+int	f_check_params(int argc, char **argv)
 {
 	if (f_check_integers(argc, argv) != 0)
 		return (1);
-/*	else if (f_check_duplicates(argc, argv) != 0)
-		return (1);*/
+	if (f_check_duplicates(argc, argv) != 0)
+		return (1);
 	return (0);
 }
