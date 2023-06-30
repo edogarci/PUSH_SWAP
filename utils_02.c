@@ -76,7 +76,7 @@ void	f_init_stack_indexes(t_list **stack_head)
 
 //Returns the maximum number of needed iterations
 //to sort the stack. This number will be equal to
-//the position  of the last bit equal to one (1)
+//the position of the last bit equal to one (1)
 // of the largest number (counting right to left)
 int	f_get_iterations_needed(t_list *stack)
 {
@@ -90,7 +90,8 @@ int	f_get_iterations_needed(t_list *stack)
 	while (element != NULL)
 	{
 		needed_iter = (int) sizeof(int) * 8 - 1;
-		while ((((element->value >> needed_iter) & 1) == 0)
+		//while ((((element->value >> needed_iter) & 1) == 0)
+		while ((((element->index >> needed_iter) & 1) == 0)
 			&& (needed_iter >= 0))
 			needed_iter--;
 		if (needed_iter > iter)

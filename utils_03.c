@@ -96,7 +96,8 @@ void	f_sort_n_iteration(int iteration, t_list **stack_a, t_list **stack_b)
 	len = f_get_stack_len(*stack_a);
 	while (n++ < len)
 	{
-		if ((((*stack_a)->value >> iteration) & 1) == 0)
+		//if ((((*stack_a)->value >> iteration) & 1) == 0)
+		if ((((*stack_a)->index >> iteration) & 1) == 0)
 			f_do_push(stack_a, stack_b, "pb");
 		else
 			f_do_rotate(stack_a, "ra");

@@ -26,7 +26,7 @@ int	f_atoi(const char *str)
 	dec = 1;
 	while ((len - 1) >= 0)
 	{
-		if ((len == 0) && (str[len] == '-'))
+		if (((len - 1) == 0) && (str[len - 1] == '-'))
 			n = n * -1;
 		else
 		{
