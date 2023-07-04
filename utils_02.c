@@ -85,12 +85,10 @@ int	f_get_iterations_needed(t_list *stack)
 	int		iter;
 
 	iter = 0;
-	needed_iter = ((int) sizeof(int) * 8) - 1;
 	element = stack;
 	while (element != NULL)
 	{
 		needed_iter = (int) sizeof(int) * 8 - 1;
-		//while ((((element->value >> needed_iter) & 1) == 0)
 		while ((((element->index >> needed_iter) & 1) == 0)
 			&& (needed_iter >= 0))
 			needed_iter--;
@@ -104,7 +102,7 @@ int	f_get_iterations_needed(t_list *stack)
 //Iterate over stack elements as many times as necessary,
 //based on last N bit of the number, partly sorting the
 //stack each of this iterations
-void	f_sort_stack_elements(t_list **stack_a, t_list **stack_b)
+void	f_sort_radix(t_list **stack_a, t_list **stack_b)
 {
 	int	iteration_n;
 	int	max_iter;
@@ -112,5 +110,9 @@ void	f_sort_stack_elements(t_list **stack_a, t_list **stack_b)
 	iteration_n = 0;
 	max_iter = f_get_iterations_needed(*stack_a);
 	while (iteration_n < max_iter)
+	{
+		if (f_is_sorted(*stack_a) == 0)
+			break ;
 		f_sort_n_iteration(iteration_n++, stack_a, stack_b);
+	}
 }

@@ -44,3 +44,107 @@ int	f_compare_params(char *str1, char *str2)
 	}
 	return (1);
 }
+
+//Returns zero (0) if the stack is sorted
+//It is used to stop a sorting algorithm if
+//stack is already sorted
+int	f_is_sorted(t_list *stack)
+{
+	while (stack != NULL && stack->next != NULL)
+	{
+		if (stack->value <= stack->next->value)
+			stack = stack->next;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+//Swap two top items in a stack
+//First becomes second, and second
+//becomes first
+void	f_do_swap(t_list **stack_head, char *action)
+{
+	t_list *seg;
+
+	seg = (*stack_head)->next;
+	(*stack_head)->next = (*stack_head)->next->next;
+	seg->next = *stack_head;
+	*stack_head = seg;
+	f_print_action(action);
+}
+
+//Get first and second minimum values
+//positions in the stack
+void	f_get_mins_pos(t_list *stack, int *f_min, int *s_min)
+{
+	int		p;
+
+	p = 0;
+	while (stack != NULL)
+	{
+		if (stack->index == 0)
+			*f_min = p;
+		else if (stack->index == 1)
+			*s_min = p;
+		stack = stack->next;
+		p++;
+	}
+}
+
+//Performs a reverse rotate operation on given stack
+void	f_do_rev_rot(t_list **stack, char *action)
+{
+	t_list	*last_element;
+	t_list	*head_element;
+
+	head_element = (*stack)->next;
+	last_element = *stack;
+	while (last_element->next != NULL)
+		last_element = last_element->next;
+	last_element->next = *stack;
+	(*stack)->next->next = NULL;
+	*stack = last_element;
+	f_print_action(action);
+}
+
+//Sort a stack of three elements
+void	f_sort_three_items(t_list **stack)
+{
+	int 	f_min;
+	int		s_min;
+
+	f_get_mins_pos(*stack, &f_min, &s_min);
+	if (f_min == 0 && s_min == 2)
+	{
+		f_do_rotate(stack, "ra");
+		f_do_swap(stack, "sa");
+		f_do_rev_rot(stack, "rra");
+	}
+	else if (f_min == 1 && s_min == 0)
+		f_do_swap(stack, "sa");
+	else if (f_min == 2 && s_min == 0)
+		f_do_rev_rot(stack, "rra");
+	else if (f_min == 1 && s_min == 2)
+		f_do_rotate(stack, "ra");
+	else if (f_min == 2 && s_min == 1)
+	{
+		f_do_rotate(stack, "ra");
+		f_do_rotate(stack, "ra");
+	}
+}
+
+//Simple sort for when given parameters are less than 6 numbers
+//In this implementation, INSERTION algorithm has been used
+void	f_sort_simple(t_list **stack_a, t_list **stack_b, int argc)
+{
+	if (f_is_sorted(*stack_a) != 0)
+	{
+		if (argc == 3)
+			f_do_swap(stack_a);
+		else if (argc == 4)
+			f_sort_three_items(stack_a);
+		/*else if (argc == 5)
+		else if (argc == 6)*/
+	}
+}
