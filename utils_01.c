@@ -13,36 +13,39 @@
 #include "push_swap.h"
 
 //Converts params from char * type to integer type
-int	f_atoi(const char *str)
+int	f_atoi(const char *str, int *numero)
 {
-	long	n;
-	int		dec;
-	int		len;
+	long long	num;
+	long long	dec;
+	int			len;
 
 	len = 0;
 	while (str[len] != '\0')
 		len++;
-	n = 0;
+	num = 0;
 	dec = 1;
 	while ((len - 1) >= 0)
 	{
 		if (((len - 1) == 0) && (str[len - 1] == '-'))
-			n = n * -1;
+			num = num * -1;
 		else
 		{
-			n = n + ((str[len - 1] - '0') * dec);
+			num = num + ((str[len - 1] - '0') * dec);
 			dec = dec * 10;
 		}
 		len--;
+		if (num < -2147483648 || num > 2147483647)
+			return (1);
 	}
-	return ((int)n);
+	*numero = (int)num;
+	return (0);
 }
 
 //Initialize STACK with given parameters.
 //First parameter is the one on top. After it converts
 //param to proper integer, it is assigned to stack a,
 //as an element of the linked list representing the stack
-void	f_init_stack(int argc, char **argv, t_list **stack_head)
+int	f_init_stack(int argc, char **argv, t_list **stack_head)
 {
 	int		cont;
 	t_list	*stack_element;
@@ -63,10 +66,12 @@ void	f_init_stack(int argc, char **argv, t_list **stack_head)
 			if (stack_element->next)
 				stack_element = stack_element->next;
 		}
-		stack_element->value = f_atoi(argv[cont++]);
+		if (f_atoi(argv[cont++], &(stack_element->value)) != 0)
+			return (1);
 		stack_element->index = -1;
 		stack_element->next = NULL;
 	}
+	return (0);
 }
 
 //Check if all parameters given when calling program
@@ -81,6 +86,8 @@ int	f_check_integers(int argc, char **argv)
 	while (cont < argc)
 	{
 		s = argv[cont];
+		if ((s[1] == '\0') && !(s[0] >= '0' && s[0] <= '9'))
+			return (1);
 		p = 0;
 		while (s[p] != '\0')
 		{
@@ -122,7 +129,7 @@ int	f_check_duplicates(int argc, char **argv)
 //Check if parameters are correct:
 // - No duplicates
 // - No float numbers
-// - No numbers larger than integer type can handle
+// - No numbers larger than integer type can handle (checked in F_ATOI)
 int	f_check_params(int argc, char **argv)
 {
 	if (f_check_integers(argc, argv) != 0)
