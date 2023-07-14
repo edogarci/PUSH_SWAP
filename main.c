@@ -6,7 +6,7 @@
 /*   By: edogarci <edogarci@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 12:10:25 by edogarci          #+#    #+#             */
-/*   Updated: 2023/07/10 14:24:06 by edogarci         ###   ########.fr       */
+/*   Updated: 2023/07/14 12:07:43 by edogarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@ int	main(int argc, char *argv[])
 {
 	t_list	*stack_a;
 	t_list	*stack_b;
-	int		arg_n;
+/* 	int		arg_n; */
 	char	**arg_values;
-	
+
 	arg_values = NULL;
 	stack_a = NULL;
 	stack_b = NULL;
-	f_decompress_args(argc, argv, &arg_n, arg_values);
+/* 	f_decompress_args(argc, argv, &arg_n, arg_values); */
+	f_decompress_args(&argc, argv, arg_values);
 	if (argc >= 2)
 	{
 		if (f_check_params(argc, argv) != 0)

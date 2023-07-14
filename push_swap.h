@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h>
+# include <stdio.h>
 
 typedef struct s_list
 {
@@ -38,7 +39,7 @@ void	f_sort_four_items(t_list **stack_a, t_list **stack_b);
 void	f_sort_five_items(t_list **stack_a, t_list **stack_b);
 void	f_do_rev_rot(t_list **stack, char *action);
 void	f_push_lowest_value(t_list **stack_from, t_list **stack_to);
-void	f_decompress_args(int argc, char **argv, int *arg_n, char **arg_values);
+void	f_decompress_args(int *argc, char **argv, char **arg_values);
 int		f_init_stack(int argc, char **argv, t_list **stack_head);
 int		f_check_duplicates(int argc, char **argv);
 int		f_get_iterations_needed(t_list *stack);

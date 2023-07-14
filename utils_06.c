@@ -6,7 +6,7 @@
 /*   By: edogarci <edogarci@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 11:21:47 by edogarci          #+#    #+#             */
-/*   Updated: 2023/07/10 16:27:14 by edogarci         ###   ########.fr       */
+/*   Updated: 2023/07/14 15:16:33 by edogarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,86 +89,89 @@ void	f_sort_three_items(t_list **stack)
 	}
 }
 
-//Returns real amount of arguments passed to progam
-//and allocate a char pointer to N char pointers (as many as real arguments)
-int	f_count_args(int argc, char **argv, char **arg_values)
+//Counts real amount of arguments when they are passed
+//in between " ", ie. "-1 3 0 42", returns 4
+int	f_count_real_args(int *argc, char **argv)
 {
+	int		real_args;
 	int		cont;
-	int		real_amount;
-	int		start;
+	int		pos;
+	char	*s;
 
-	real_amount = 0;
+	real_args = 0;
+	cont = 1;
+	while (cont < *argc)
+	{
+		s = argv[cont];
+		pos = 0;
+		while (pos <= f_get_str_len(s) && s[pos] == ' ')
+			pos++;
+		while (pos <= f_get_str_len(s))
+		{
+			if (pos == 0 && s[pos] != ' ')
+				real_args++;
+			if (s[pos - 1] == ' ' && (s[pos] != ' ' && s[pos] != '\0'))
+				real_args++;
+			pos++;
+		}
+		cont++;
+	}
+	return (real_args);
+}
+
+int	f_get_next_arg_len(int start, char *str)
+{
+	int	len;
+
+	len = 0;
+	while (start < f_get_str_len(str) && str[start] != ' ' && str[start] != '\0')
+	{
+		start++;
+		len++;
+	}
+	return (len);
+}
+
+void	f_fill_arg_values(int argc, char **arg_values, char **argv)
+{
+	int		start;
+	int		arg_len;
+	int		cont;
+	int		real_argc;
+
+	real_argc = 0;
 	cont = 1;
 	while (cont < argc)
 	{
 		start = 0;
-		while (start <= f_get_str_len(argv[cont]))
+		while (start < f_get_str_len(argv[cont]))
 		{
-			if (argv[cont][start] == ' ' || argv[cont][start] == '\0')
-				real_amount++;
-			start++;
+			if (argv[cont][start] == '\0')
+				break ;
+			while (argv[cont][start] == ' ')
+				start++;
+			arg_len = f_get_next_arg_len(start, argv[cont]);
+			if (arg_len == 0)
+				break ;
+			arg_values[real_argc] = malloc((arg_len + 1) * sizeof(char));
+			//asigna valor parametro
+			real_argc++;
+			start = start + arg_len;
 		}
 		cont++;
-	}
-	arg_values = malloc((real_amount + 1) * sizeof(char *));
-	if (!arg_values)
-		return (-1);
-	return (real_amount);
-}
-
-void	f_asigna_valor(char **values, int curval, char *str, int len)
-{
-	int	p;
-
-	p = 0;
-	while (p < len)
-	{
-		values[curval][p] = str[p];
-		p++;
-	}
-}
-
-//Create one 'argument', one for each number passed to the program
-//(i.e) ./push_swap "1111" 4 "1 3a" will be:
-// - arg_values[0] = 1111
-// - arg_values[1] = 4
-// - arg_values[2] = 1
-// - arg_values[3] = 3a
-//---Errors will be handled in f_check_params and f_atoi---
-void	f_create_real_args(int *arg_n, char **values, int argc, char **argv)
-{
-	int	curr_argv;
-	int	i;
-	int	start;
-	int	curval;
-
-	curval = 0;
-	start = -1;
-	curr_argv = 0;
-	i = 0;
-	while (curr_argv < argc)
-	{
-		while (i <= f_get_str_len(argv[curr_argv]))
-		{
-			if ((argv[curr_argv][i] != ' ') && (argv[curr_argv][i] != '\0') && (start == -1))
-				start = i;
-			if ((argv[curr_argv][i] == ' ') || (argv[curr_argv][i] == '\0'))
-			{
-				values[curval] = malloc((i - start + 1) * sizeof(char));
-				f_asigna_valor(values, curval, &(argv[curr_argv][start]), i);
-			}
-			i++;
-		}
-		curr_argv++;
 	}
 }
 
 //In case various numbers are provided as one argument
 //(i.e ./push_swap "1 -3 -1", instead of ./push_swap 1 -3 1),
-//this function split them in multiple arguments
-void	f_decompress_args(int argc, char **argv, int *arg_n, char **arg_values)
+//this function split them in multiple arguments, updating original ARGC
+void	f_decompress_args(int *argc, char **argv, char **arg_values)
 {
-	*arg_n = f_count_args(argc, argv, arg_values);
-	if (*arg_n != -1)
-		f_create_real_args(arg_n, arg_values, argc, argv);
+	int	real_argc;
+
+	real_argc = f_count_real_args(argc, argv);
+	arg_values = malloc((real_argc + 1) * sizeof(char *));
+	arg_values[real_argc] = NULL;
+	f_fill_arg_values(*argc, arg_values, argv);
+	*argc = real_argc;
 }
