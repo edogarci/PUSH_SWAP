@@ -13,9 +13,10 @@
 #include "push_swap.h"
 
 //Free allocated memory
-void	f_clear_mem(t_list **stack)
+void	f_mem(t_list **stack, char **args)
 {
 	t_list	*head;
+	int		cont;
 
 	while (*stack != NULL)
 	{
@@ -23,6 +24,10 @@ void	f_clear_mem(t_list **stack)
 		free(*stack);
 		*stack = head;
 	}
+	cont = 0;
+	while (args[cont] != NULL)
+		free(args[cont++]);
+	free(args);
 }
 
 //Print on screen executed action (pa, pb, ra...)

@@ -6,7 +6,7 @@
 /*   By: edogarci <edogarci@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 11:20:25 by edogarci          #+#    #+#             */
-/*   Updated: 2023/07/07 11:38:59 by edogarci         ###   ########.fr       */
+/*   Updated: 2023/07/17 13:06:24 by edogarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,13 @@ void	f_sort_simple(t_list **stack_a, t_list **stack_b, int argc)
 {
 	if (f_is_sorted(*stack_a) != 0)
 	{
-		if (argc == 3)
+		if (argc == 2)
 			f_do_swap(stack_a, "sa");
-		else if (argc == 4)
+		else if (argc == 3)
 			f_sort_three_items(stack_a);
-		else if (argc == 5)
+		else if (argc == 4)
 			f_sort_four_items(stack_a, stack_b);
-		else if (argc == 6)
+		else if (argc == 5)
 			f_sort_five_items(stack_a, stack_b);
 	}
 }

@@ -34,9 +34,9 @@ int	f_atoi(const char *str, int *numero)
 			dec = dec * 10;
 		}
 		len--;
-		if (num < -2147483648 || num > 2147483647)
-			return (1);
 	}
+	if (num < -2147483648 || num > 2147483647)
+		return (1);
 	*numero = (int)num;
 	return (0);
 }
@@ -51,7 +51,7 @@ int	f_init_stack(int argc, char **argv, t_list **stack_head)
 	t_list	*stack_element;
 
 	stack_element = NULL;
-	cont = 1;
+	cont = 0;
 	while (cont < argc)
 	{
 		if (!stack_element)
@@ -82,7 +82,7 @@ int	f_check_integers(int argc, char **argv)
 	int		p;
 	char	*s;
 
-	cont = 1;
+	cont = 0;
 	while (cont < argc)
 	{
 		s = argv[cont];
@@ -107,16 +107,21 @@ int	f_check_duplicates(int argc, char **argv)
 {
 	int	j;
 	int	i;
+	int	n1;
+	int	n2;
 
-	j = 1;
+	j = 0;
 	while (j < argc)
 	{
-		i = 1;
+		i = 0;
 		while (i < argc)
 		{
 			if (j != i)
 			{
 				if (f_compare_params(argv[j], argv[i]) != 0)
+					return (1);
+				if ((f_atoi(argv[j], &n1) != 0) || (f_atoi(argv[i], &n2) != 0)
+					|| (n1 == n2))
 					return (1);
 			}
 			i++;

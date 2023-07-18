@@ -6,7 +6,7 @@
 /*   By: edogarci <edogarci@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 11:21:47 by edogarci          #+#    #+#             */
-/*   Updated: 2023/07/14 15:16:33 by edogarci         ###   ########.fr       */
+/*   Updated: 2023/07/17 11:25:29 by edogarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,59 +119,19 @@ int	f_count_real_args(int *argc, char **argv)
 	return (real_args);
 }
 
+//Returns next argument length
 int	f_get_next_arg_len(int start, char *str)
 {
-	int	len;
+	int		len;
+	char	c;
 
 	len = 0;
-	while (start < f_get_str_len(str) && str[start] != ' ' && str[start] != '\0')
+	c = str[start];
+	while (start < f_get_str_len(str) && c != ' ' && c != '\0')
 	{
 		start++;
 		len++;
+		c = str[start];
 	}
 	return (len);
-}
-
-void	f_fill_arg_values(int argc, char **arg_values, char **argv)
-{
-	int		start;
-	int		arg_len;
-	int		cont;
-	int		real_argc;
-
-	real_argc = 0;
-	cont = 1;
-	while (cont < argc)
-	{
-		start = 0;
-		while (start < f_get_str_len(argv[cont]))
-		{
-			if (argv[cont][start] == '\0')
-				break ;
-			while (argv[cont][start] == ' ')
-				start++;
-			arg_len = f_get_next_arg_len(start, argv[cont]);
-			if (arg_len == 0)
-				break ;
-			arg_values[real_argc] = malloc((arg_len + 1) * sizeof(char));
-			//asigna valor parametro
-			real_argc++;
-			start = start + arg_len;
-		}
-		cont++;
-	}
-}
-
-//In case various numbers are provided as one argument
-//(i.e ./push_swap "1 -3 -1", instead of ./push_swap 1 -3 1),
-//this function split them in multiple arguments, updating original ARGC
-void	f_decompress_args(int *argc, char **argv, char **arg_values)
-{
-	int	real_argc;
-
-	real_argc = f_count_real_args(argc, argv);
-	arg_values = malloc((real_argc + 1) * sizeof(char *));
-	arg_values[real_argc] = NULL;
-	f_fill_arg_values(*argc, arg_values, argv);
-	*argc = real_argc;
 }
